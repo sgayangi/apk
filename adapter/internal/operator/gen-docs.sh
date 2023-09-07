@@ -32,23 +32,31 @@ gendoc::build() {
     go install github.com/ahmetb/gen-crd-api-reference-docs
 }
 
-# Exec the doc generator.
 gendoc::exec() {
+    local gofile="$1"
+    local outfile="$2"
     local readonly confdir="${REPO}/api-docs"
+
+    # Ensure that the gofile and outfile are set and not empty
+    if [[ -z "$gofile" || -z "$outfile" ]]; then
+        echo "Error: Missing arguments for gendoc::exec"
+        exit 1
+    fi
 
     ${GOBIN}/gen-crd-api-reference-docs \
         -template-dir ${confdir} \
         -config ${confdir}/config.json \
-        "$@"
+        -api-dir "github.com/wso2/apk/adapter/internal/operator/apis/dp/v1alpha1" \
+        -out-file "${outfile}" \
+        -v 10
 }
 
-if [ "$#" != "1" ]; then
-    echo "usage: generate.sh OUTFILE"
+if [ "$#" != "2" ]; then
+    echo "usage: gen-docs.sh GOFILE OUTFILE"
     exit 2
 fi
 
-gendoc::build
-gendoc::exec \
-    -api-dir "github.com/wso2/apk/adapter/internal/operator/apis/dp/v1alpha1" \
-    -out-file "${1}" \
-    -v 10
+gofile="$1"
+outfile="$2"
+# gendoc::build
+gendoc::exec "$gofile" "$outfile"
