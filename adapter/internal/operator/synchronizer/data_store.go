@@ -110,6 +110,7 @@ func (ods *OperatorDataStore) processAPIState(apiNamespacedName types.Namespaced
 	}
 	if len(apiState.Authentications) != len(cachedAPI.Authentications) {
 		cachedAPI.Authentications = apiState.Authentications
+		cachedAPI.MutualSSL = apiState.MutualSSL
 		updated = true
 		events = append(events, "Authentications")
 	} else {
@@ -117,12 +118,14 @@ func (ods *OperatorDataStore) processAPIState(apiNamespacedName types.Namespaced
 			if existingAuth, found := cachedAPI.Authentications[key]; found {
 				if auth.UID != existingAuth.UID || auth.Generation > existingAuth.Generation {
 					cachedAPI.Authentications = apiState.Authentications
+					cachedAPI.MutualSSL = apiState.MutualSSL
 					updated = true
 					events = append(events, "Authentications")
 					break
 				}
 			} else {
 				cachedAPI.Authentications = apiState.Authentications
+				cachedAPI.MutualSSL = apiState.MutualSSL
 				updated = true
 				events = append(events, "Authentications")
 				break
