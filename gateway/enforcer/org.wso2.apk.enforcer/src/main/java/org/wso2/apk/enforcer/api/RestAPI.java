@@ -85,7 +85,6 @@ public class RestAPI implements API {
         String version = api.getVersion();
         String apiType = api.getApiType();
         List<ResourceConfig> resources = new ArrayList<>();
-        Map<String, String> mtlsCertificateTiers = new HashMap<>();
         String mutualSSL = api.getMutualSSL();
         boolean applicationSecurity = api.getApplicationSecurity();
 
@@ -106,10 +105,6 @@ public class RestAPI implements API {
             trustStore = MtlsUtils.createTrustStore(api.getClientCertificatesList());
         } catch (KeyStoreException e) {
             throw new SecurityException(e);
-        }
-
-        for (Certificate certificate : api.getClientCertificatesList()) {
-            mtlsCertificateTiers.put(certificate.getAlias(), certificate.getTier());
         }
 
         BackendJWTTokenInfo backendJWTTokenInfo = api.getBackendJWTTokenInfo();
@@ -143,7 +138,7 @@ public class RestAPI implements API {
                 .resources(resources).apiType(apiType).apiLifeCycleState(apiLifeCycleState).tier(api.getTier())
                 .envType(api.getEnvType()).disableAuthentication(api.getDisableAuthentications())
                 .disableScopes(api.getDisableScopes()).trustStore(trustStore).organizationId(api.getOrganizationId())
-                .mtlsCertificateTiers(mtlsCertificateTiers).mutualSSL(mutualSSL).systemAPI(api.getSystemAPI())
+                .mutualSSL(mutualSSL).systemAPI(api.getSystemAPI())
                 .applicationSecurity(applicationSecurity).jwtConfigurationDto(jwtConfigurationDto)
                 .apiDefinition(apiDefinition).environment(api.getEnvironment())
                 .subscriptionValidation(api.getSubscriptionValidation()).build();
