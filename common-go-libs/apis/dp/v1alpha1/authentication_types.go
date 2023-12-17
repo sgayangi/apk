@@ -57,6 +57,11 @@ type APIAuth struct {
 	//
 	// +optional
 	TestConsoleKey TestConsoleKeyAuth `json:"testConsoleKey,omitempty"`
+
+	// Mtls is to specify the features and certificates for mutual SSL
+	//
+	// +optional
+	Mtls *MutualSSLConfig `json:"mtls,omitempty"`
 }
 
 // TestConsoleKeyAuth Test Console Key Authentication scheme details
@@ -111,6 +116,25 @@ type APIKeyAuth struct {
 	//
 	// +optional
 	SendTokenToUpstream bool `json:"sendTokenToUpstream,omitempty"`
+}
+
+// MutualSSLConfig scheme type and details
+type MutualSSLConfig struct {
+	// Required indicates whether mutualSSL is mandatory or optional
+	// +kubebuilder:validation:Enum=mandatory;optional
+	Required string `json:"required"`
+
+	// Disabled indicates whether mutualSSL is enabled or disabled
+	Disabled bool `json:"disabled"`
+
+	// CertificatesInline is the Inline Certificate entry
+	CertificatesInline []*string `json:"certificatesInline,omitempty"`
+
+	// SecretRefs denotes the reference to the Secret that contains the Certificate
+	SecretRefs []*RefConfig `json:"secretRefs,omitempty"`
+
+	// ConfigMapRefs denotes the reference to the ConfigMap that contains the Certificate
+	ConfigMapRefs []*RefConfig `json:"configMapRefs,omitempty"`
 }
 
 // AuthenticationStatus defines the observed state of Authentication

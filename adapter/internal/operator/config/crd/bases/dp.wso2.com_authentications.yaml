@@ -3,8 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.9.2
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: authentications.dp.wso2.com
 spec:
   group: dp.wso2.com
@@ -68,6 +67,71 @@ spec:
                           type: object
                         nullable: true
                         type: array
+                      mtls:
+                        description: Mtls is to specify the features and certificates
+                          for mutual SSL
+                        properties:
+                          certificatesInline:
+                            description: CertificatesInline is the Inline Certificate
+                              entry
+                            items:
+                              type: string
+                            type: array
+                          configMapRefs:
+                            description: ConfigMapRefs denotes the reference to the
+                              ConfigMap that contains the Certificate
+                            items:
+                              description: RefConfig holds a config for a secret or
+                                a configmap
+                              properties:
+                                key:
+                                  description: Key of the secret or configmap
+                                  minLength: 1
+                                  type: string
+                                name:
+                                  description: Name of the secret or configmap
+                                  minLength: 1
+                                  type: string
+                              required:
+                              - key
+                              - name
+                              type: object
+                            type: array
+                          disabled:
+                            description: Disabled indicates whether mutualSSL is enabled
+                              or disabled
+                            type: boolean
+                          required:
+                            description: Required indicates whether mutualSSL is mandatory
+                              or optional
+                            enum:
+                            - mandatory
+                            - optional
+                            type: string
+                          secretRefs:
+                            description: SecretRefs denotes the reference to the Secret
+                              that contains the Certificate
+                            items:
+                              description: RefConfig holds a config for a secret or
+                                a configmap
+                              properties:
+                                key:
+                                  description: Key of the secret or configmap
+                                  minLength: 1
+                                  type: string
+                                name:
+                                  description: Name of the secret or configmap
+                                  minLength: 1
+                                  type: string
+                              required:
+                              - key
+                              - name
+                              type: object
+                            type: array
+                        required:
+                        - disabled
+                        - required
+                        type: object
                       oauth2:
                         description: Oauth2 is to specify the Oauth2 authentication
                           scheme details
@@ -139,6 +203,71 @@ spec:
                           type: object
                         nullable: true
                         type: array
+                      mtls:
+                        description: Mtls is to specify the features and certificates
+                          for mutual SSL
+                        properties:
+                          certificatesInline:
+                            description: CertificatesInline is the Inline Certificate
+                              entry
+                            items:
+                              type: string
+                            type: array
+                          configMapRefs:
+                            description: ConfigMapRefs denotes the reference to the
+                              ConfigMap that contains the Certificate
+                            items:
+                              description: RefConfig holds a config for a secret or
+                                a configmap
+                              properties:
+                                key:
+                                  description: Key of the secret or configmap
+                                  minLength: 1
+                                  type: string
+                                name:
+                                  description: Name of the secret or configmap
+                                  minLength: 1
+                                  type: string
+                              required:
+                              - key
+                              - name
+                              type: object
+                            type: array
+                          disabled:
+                            description: Disabled indicates whether mutualSSL is enabled
+                              or disabled
+                            type: boolean
+                          required:
+                            description: Required indicates whether mutualSSL is mandatory
+                              or optional
+                            enum:
+                            - mandatory
+                            - optional
+                            type: string
+                          secretRefs:
+                            description: SecretRefs denotes the reference to the Secret
+                              that contains the Certificate
+                            items:
+                              description: RefConfig holds a config for a secret or
+                                a configmap
+                              properties:
+                                key:
+                                  description: Key of the secret or configmap
+                                  minLength: 1
+                                  type: string
+                                name:
+                                  description: Name of the secret or configmap
+                                  minLength: 1
+                                  type: string
+                              required:
+                              - key
+                              - name
+                              type: object
+                            type: array
+                        required:
+                        - disabled
+                        - required
+                        type: object
                       oauth2:
                         description: Oauth2 is to specify the Oauth2 authentication
                           scheme details

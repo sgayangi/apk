@@ -97,3 +97,5 @@ require (
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	sigs.k8s.io/gateway-api v0.7.1
 )
+
+replace github.com/wso2/apk/common-go-libs => /Users/gayangiseneviratne/Documents/APIM_APK/APK/apk/common-go-libs

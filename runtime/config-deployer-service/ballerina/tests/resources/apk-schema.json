@@ -43,7 +43,7 @@
       "type": "boolean",
       "description": "Is this the default version of the API"
     },
-    "subscriptionValidation" : {
+    "subscriptionValidation": {
       "type": "boolean",
       "description": "Is subscription validation enabled for the API"
     },
@@ -133,6 +133,31 @@
         "queryParamEnable": {
           "type": "boolean",
           "description": "Specifies whether the authentication token can be sent as a query parameter."
+        },
+        "required": {
+          "type": "string",
+          "enum": [
+            "mandatory",
+            "optional"
+          ],
+          "description": "Specifies whether mTLS is mandatory or optional"
+        },
+        "certificates": {
+          "type": "array",
+          "description": "The names and keys of the secrets containing the mTLS certificates of that API",
+          "default": [],
+          "example": [],
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "key": {
+                "type": "string"
+              }
+            }
+          }
         }
       },
       "additionalProperties": false

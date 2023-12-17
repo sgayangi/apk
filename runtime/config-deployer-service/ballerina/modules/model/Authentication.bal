@@ -37,6 +37,13 @@ public type AuthenticationData record {
 public type AuthenticationExtenstionType record {
     OAuth2Authentication oauth2?;
     APIKey[] apiKey = [];
+    MutualSSL mtls?;
+};
+
+public type MutualSSL record {
+    string required?;
+    boolean disabled;
+    RefConfig[] configMapRefs?;
 };
 
 public type OAuth2Authentication record {

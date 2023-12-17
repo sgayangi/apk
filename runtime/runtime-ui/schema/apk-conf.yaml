@@ -112,6 +112,22 @@ schemas:
         description:
           Specifies whether the authentication token can be sent as a query
           parameter.
+      required:
+        type: string
+        enum:
+          - mandatory
+          - optional
+        description: Specifies whether mTLS is mandatory or optional
+      certificates:
+        type: array
+        description: The names and keys of the secrets containing the mTLS certificates of that API
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            key:
+              type: string
     additionalProperties: false
   CORSConfiguration:
     type: object

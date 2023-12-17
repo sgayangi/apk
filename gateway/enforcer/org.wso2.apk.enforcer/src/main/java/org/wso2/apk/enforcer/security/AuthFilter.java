@@ -97,6 +97,7 @@ public class AuthFilter implements Filter {
 
         Authenticator jwtAuthenticator = new JWTAuthenticator(jwtConfigurationDto, isGatewayTokenCacheEnabled);
         authenticators.add(jwtAuthenticator);
+
         APIKeyAuthenticator apiKeyAuthenticator = new APIKeyAuthenticator(jwtConfigurationDto);
         authenticators.add(apiKeyAuthenticator);
 

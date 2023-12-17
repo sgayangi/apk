@@ -1,3 +1,11 @@
+import config_deployer_service.java.io as javaio;
+import config_deployer_service.model;
+import config_deployer_service.org.wso2.apk.config as runtimeUtil;
+import config_deployer_service.org.wso2.apk.config.api as runtimeapi;
+import config_deployer_service.org.wso2.apk.config.model as runtimeModels;
+
+import ballerina/crypto;
+import ballerina/lang.value;
 //
 // Copyright (c) 2022, WSO2 LLC. (http://www.wso2.com).
 //
@@ -15,17 +23,10 @@
 // specific language governing permissions and limitations
 // under the License.
 //
-
 import ballerina/log;
-import config_deployer_service.model;
-import config_deployer_service.org.wso2.apk.config.model as runtimeModels;
 import ballerina/regex;
-import config_deployer_service.org.wso2.apk.config as runtimeUtil;
-import ballerina/lang.value;
-import config_deployer_service.org.wso2.apk.config.api as runtimeapi;
 import ballerina/uuid;
-import ballerina/crypto;
-import config_deployer_service.java.io as javaio;
+
 import wso2/apk_common_lib as commons;
 
 #
@@ -36,11 +37,11 @@ public class APIClient {
     # + api - APKInternalAPI model
     # + return - APKConf model.
     public isolated function fromAPIModelToAPKConf(runtimeModels:API api) returns APKConf|error {
-        string generatedBasePath = api.getName() +  api.getVersion();
+        string generatedBasePath = api.getName() + api.getVersion();
         byte[] data = generatedBasePath.toBytes();
         string encodedString = "/" + data.toBase64();
         if (encodedString.endsWith("==")) {
-            encodedString = encodedString.substring(0,encodedString.length()-2);
+            encodedString = encodedString.substring(0, encodedString.length() - 2);
         }
         APKConf apkConf = {
             name: api.getName(),
@@ -102,7 +103,7 @@ public class APIClient {
             AuthenticationRequest[]? authentication = apkConf.authentication;
             if authentication is AuthenticationRequest[] {
                 if createdEndpoints != {} {
-                _ = check self.populateAuthenticationMap(apiArtifact, apkConf, authentication, createdEndpoints, organization);
+                    _ = check self.populateAuthenticationMap(apiArtifact, apkConf, authentication, createdEndpoints, organization);
                 } else {
                     // check if there are resource level endpoints
                     if resourceLevelEndpointConfigList.length() > 0 {
@@ -348,6 +349,9 @@ public class APIClient {
                 authTypes.apiKey = [];
                 authTypes.apiKey.push({'in: "Header", name: apiKeyAuthentication.headerName, sendTokenToUpstream: apiKeyAuthentication.sendTokenToUpstream});
                 authTypes.apiKey.push({'in: "Query", name: apiKeyAuthentication.queryParamName, sendTokenToUpstream: apiKeyAuthentication.sendTokenToUpstream});
+            } else if authentication.authType == "mTLS" {
+                MTLSAuthentication mtlsAuthentication = check authentication.cloneWithType(MTLSAuthentication);
+                authTypes.mtls = {required: mtlsAuthentication.required, disabled: !mtlsAuthentication.enabled, configMapRefs: mtlsAuthentication.certificates};
             }
         }
         log:printDebug("Auth Types:" + authTypes.toString());
@@ -1416,9 +1420,9 @@ public class APIClient {
                     operationLevelProductionEndpointAvailable = endpointConfigs.production is EndpointConfiguration;
                     operationLevelSandboxEndpointAvailable = endpointConfigs.sandbox is EndpointConfiguration;
                 }
-                    if (!operationLevelProductionEndpointAvailable && !productionEndpointAvailable) && (!operationLevelSandboxEndpointAvailable && !sandboxEndpointAvailable) {
-                        errors["endpoint"] = "production/sandbox endpoint not available for " + <string>operation.target;
-                    }
+                if (!operationLevelProductionEndpointAvailable && !productionEndpointAvailable) && (!operationLevelSandboxEndpointAvailable && !sandboxEndpointAvailable) {
+                    errors["endpoint"] = "production/sandbox endpoint not available for " + <string>operation.target;
+                }
 
             }
         }

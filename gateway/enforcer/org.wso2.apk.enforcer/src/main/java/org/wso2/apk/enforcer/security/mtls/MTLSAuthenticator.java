@@ -47,8 +47,10 @@ import java.util.Objects;
  */
 public class MTLSAuthenticator implements Authenticator {
     private static final Logger log = LogManager.getLogger(MTLSAuthenticator.class);
-    private final boolean isEnableClientValidation = ConfigHolder.getInstance().getConfig().getMtlsInfo()
-                                                        .isEnableClientValidation();
+//    private final boolean isEnableClientValidation = ConfigHolder.getInstance().getConfig().getMtlsInfo()
+//                                                        .isEnableClientValidation();
+
+    private final boolean isEnableClientValidation = false;
     private final boolean isClientCertificateEncode = ConfigHolder.getInstance().getConfig().getMtlsInfo()
                                                         .isClientCertificateEncode();
 

@@ -25,6 +25,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"github.com/wso2/apk/adapter/internal/discovery/xds"
 	"k8s.io/apimachinery/pkg/types"
 
@@ -158,6 +159,14 @@ func GenerateAdapterInternalAPI(apiState APIState, httpRoute *HTTPRouteState, en
 	adapterInternalAPI.SetAPIDefinitionFile(apiState.APIDefinitionFile)
 	adapterInternalAPI.SetAPIDefinitionEndpoint(apiState.APIDefinition.Spec.DefinitionPath)
 	adapterInternalAPI.SetSubscriptionValidation(apiState.SubscriptionValidation)
+	if apiState.MutualSSL != nil && !adapterInternalAPI.IsSystemAPI {
+		adapterInternalAPI.SetMutualSSL(apiState.MutualSSL.Required)
+		adapterInternalAPI.SetClientCerts(apiState.APIDefinition.Name, apiState.MutualSSL.ClientCertificates)
+		logrus.Info("=====================================")
+		logrus.Info(adapterInternalAPI.GetMutualSSL())
+		logrus.Info("=====================================")
+	}
+
 	adapterInternalAPI.EnvType = envType
 
 	environment := apiState.APIDefinition.Spec.Environment

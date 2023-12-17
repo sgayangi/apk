@@ -17,11 +17,11 @@
 wso2:
   subscription:
     imagePullSecrets: ""
-    
+
   apk:
     webhooks:
-      validatingwebhookconfigurations : true
-      mutatingwebhookconfigurations : true
+      validatingwebhookconfigurations: true
+      mutatingwebhookconfigurations: true
     auth:
       enabled: true
       enableServiceAccountCreation: true
@@ -84,8 +84,8 @@ wso2:
             failureThreshold: 5
           strategy: RollingUpdate
           replicas: 1
-          imagePullPolicy: Always
-          image: wso2/apk-config-deployer-service:1.1.0-m1
+          imagePullPolicy: IfNotPresent
+          image: apk-config-deployer-service:1.1.0-SNAPSHOT
           # configs:
           #   tls:
           #     secretName: "my-secret"
@@ -110,20 +110,20 @@ wso2:
             failureThreshold: 5
           strategy: RollingUpdate
           replicas: 1
-          imagePullPolicy: Always
-          image: wso2/apk-adapter:1.1.0-m1
+          imagePullPolicy: IfNotPresent
+          image: apk-adapter:1.1.0-SNAPSHOT
           security:
             sslHostname: "adapter"
-#        logging:
-#          level: "INFO" # LogLevels can be "DEBG", "FATL", "ERRO", "WARN", "INFO", "PANC"
-#          logFormat: "TEXT" # Values can be "JSON", "TEXT"
-        # configs:
-        #   apiNamespaces:
-        #     - "apk-v12"
-        #   tls:
-        #     secretName: "adapter-cert"
-        #     certKeyFilename: ""
-        #     certFilename: ""
+      #        logging:
+      #          level: "INFO" # LogLevels can be "DEBG", "FATL", "ERRO", "WARN", "INFO", "PANC"
+      #          logFormat: "TEXT" # Values can be "JSON", "TEXT"
+      # configs:
+      #   apiNamespaces:
+      #     - "apk-v12"
+      #   tls:
+      #     secretName: "adapter-cert"
+      #     certKeyFilename: ""
+      #     certFilename: ""
       commonController:
         deployment:
           resources:
@@ -143,8 +143,8 @@ wso2:
             failureThreshold: 5
           strategy: RollingUpdate
           replicas: 1
-          imagePullPolicy: Always
-          image: wso2/apk-common-controller:1.1.0-m1
+          imagePullPolicy: IfNotPresent
+          image: apk-common-controller:1.1.0-SNAPSHOT
           security:
             sslHostname: "commoncontroller"
           # configs:
@@ -170,7 +170,7 @@ wso2:
             failureThreshold: 5
           strategy: RollingUpdate
           replicas: 1
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           image: wso2/apk-ratelimiter:1.1.0-m1
           security:
             sslHostname: "ratelimiter"
@@ -200,20 +200,20 @@ wso2:
               periodSeconds: 20
               failureThreshold: 5
             strategy: RollingUpdate
-            imagePullPolicy: Always
+            imagePullPolicy: IfNotPresent
             image: wso2/apk-router:1.1.0-m1
             # configs:
             #   tls:
             #     secretName: "router-cert"
             #     certKeyFilename: ""
             #     certFilename: ""
-#            logging:
-#              wireLogs:
-#                enable: true
-#              accessLogs:
-#                enable: true
-#            env:
-#              TRAILING_ARGS: "--log-level trace"
+          #            logging:
+          #              wireLogs:
+          #                enable: true
+          #              accessLogs:
+          #                enable: true
+          #            env:
+          #              TRAILING_ARGS: "--log-level trace"
           enforcer:
             resources:
               requests:
@@ -231,17 +231,17 @@ wso2:
               periodSeconds: 20
               failureThreshold: 5
             strategy: RollingUpdate
-            imagePullPolicy: Always
-            image: wso2/apk-enforcer:1.1.0-m1
+            imagePullPolicy: IfNotPresent
+            image: apk-enforcer:1.1.0-SNAPSHOT
             security:
               sslHostname: "enforcer"
 #            logging:
 #              level: DEBUG
-            # configs:
-            #   tls:
-            #     secretName: "router-cert"
-            #     certKeyFilename: ""
-            #     certFilename: ""
+# configs:
+#   tls:
+#     secretName: "router-cert"
+#     certKeyFilename: ""
+#     certFilename: ""
 idp:
   enabled: true
   listener:
@@ -284,7 +284,7 @@ idp:
         failureThreshold: 5
       strategy: RollingUpdate
       replicas: 1
-      imagePullPolicy: Always
+      imagePullPolicy: IfNotPresent
       image: wso2/apk-idp-domain-service:1.1.0-m1
   idpui:
     deployment:
@@ -305,7 +305,7 @@ idp:
         failureThreshold: 5
       strategy: RollingUpdate
       replicas: 1
-      imagePullPolicy: Always
+      imagePullPolicy: IfNotPresent
       image: wso2/apk-idp-ui:1.1.0-m1
     configs:
       idpLoginUrl: "https://idp.am.wso2.com:9095/commonauth/login"
@@ -317,13 +317,12 @@ gatewaySystem:
   enableClusterRoleCreation: true
   serviceAccountName: gateway-api-admission
 
-
 certmanager:
   enabled: true
   enableClusterIssuer: true
   enableRootCa: true
   rootCaSecretName: "apk-root-certificate"
-  
+
 postgresql:
   enabled: true
   fullnameOverride: "wso2apk-db-service"
