@@ -27,6 +27,7 @@ spec:
   apiType: "REST"
   apiVersion: "1.0.0"
   basePath: "/dcr/1.0.0"
+  definitionPath: "/"
   isDefaultVersion: true
   organization: "apk-system"
   production:

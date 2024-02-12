@@ -27,6 +27,7 @@ spec:
   apiType: "REST"
   apiVersion: "1.0.0"
   basePath: "/.wellknown/jwks/1.0.0"
+  definitionPath: "/"
   organization: "apk-system"
   isDefaultVersion: true
   production:

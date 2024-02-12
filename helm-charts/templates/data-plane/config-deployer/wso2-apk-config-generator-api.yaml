@@ -26,6 +26,7 @@ spec:
   apiType: "REST"
   apiVersion: "1.0.0"
   basePath: "/api/configurator/1.0.0"
+  definitionPath: "/api/deployer/1.0.0/definition"
   isDefaultVersion: true
   organization: "apk-system"
   definitionFileRef: "{{ template "apk-helm.resource.prefix" . }}-wso2-apk-config-generator-api-definition"

@@ -27,6 +27,7 @@ spec:
   apiType: "REST"
   apiVersion: "1.0.0"
   basePath: "/commonoauth/1.0.0"
+  definitionPath: "/commonoauth//1.0.0/swagger"
   isDefaultVersion: true
   organization: "apk-system"
   production:

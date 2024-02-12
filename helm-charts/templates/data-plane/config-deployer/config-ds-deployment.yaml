@@ -63,15 +63,15 @@ spec:
               subPath: Config.toml
             - name: config-ds-tls-volume
               mountPath: /home/wso2apk/config-deployer/security/config.key
-            {{- if and .Values.wso2.apk.dp.configdeployer.configs .Values.wso2.apk.dp.configdeployer.configs.tls }}
-              subPath: {{ .Values.wso2.apk.dp.configdeployer.configs.tls.certKeyFilename | default "tls.key" }}
+            {{- if and .Values.wso2.apk.dp.configdeployer.deployment.configs .Values.wso2.apk.dp.configdeployer.deployment.configs.tls }}
+              subPath: {{ .Values.wso2.apk.dp.configdeployer.deployment.configs.tls.certKeyFilename | default "tls.key" }}
             {{- else }}
               subPath: tls.key
             {{- end }}
             - name: config-ds-tls-volume
               mountPath: /home/wso2apk/config-deployer/security/config.pem
-            {{- if and .Values.wso2.apk.dp.configdeployer.configs .Values.wso2.apk.dp.configdeployer.configs.tls }}
-              subPath: {{ .Values.wso2.apk.dp.configdeployer.configs.tls.certFilename | default "tls.crt" }}
+            {{- if and .Values.wso2.apk.dp.configdeployer.deployment.configs .Values.wso2.apk.dp.configdeployer.deployment.configs.tls }}
+              subPath: {{ .Values.wso2.apk.dp.configdeployer.deployment.configs.tls.certFilename | default "tls.crt" }}
             {{- else }}
               subPath: tls.crt
             {{- end }}
@@ -107,8 +107,8 @@ spec:
             name: {{ template "apk-helm.resource.prefix" . }}-config-ds-configmap
         - name: config-ds-tls-volume
           secret:
-       {{ if and .Values.wso2.apk.dp.configdeployer.configs .Values.wso2.apk.dp.configdeployer.configs.tls }}
-            secretName: {{ .Values.wso2.apk.dp.configdeployer.configs.tls.secretName | default (printf "%s-config-ds-server-cert" (include "apk-helm.resource.prefix" .)) }}
+       {{ if and .Values.wso2.apk.dp.configdeployer.deployment.configs .Values.wso2.apk.dp.configdeployer.deployment.configs.tls }}
+            secretName: {{ .Values.wso2.apk.dp.configdeployer.deployment.configs.tls.secretName | default (printf "%s-config-ds-server-cert" (include "apk-helm.resource.prefix" .)) }}
        {{ else }}
             secretName: {{ template "apk-helm.resource.prefix" . }}-config-ds-server-cert
        {{ end }}
