@@ -258,3 +258,36 @@ Refer to this example [PR](https://github.com/wso2/apk/pull/370) for more inform
     ```go
     (&dpv1alpha1.APIPolicy{}).SetupWebhookWithManager(mgr)
     ```
+
+### Generating the CRD catalog documentation
+
+These steps must be followed to autogenerate the CRD documentation.
+
+Create a file in each of the target folders for autogeneration containing just the package name if its not already present.
+For example, in a v1alpha2 folder, create a go file named doc.go before running the following commands, and insert the following:
+```
+// Package v1alpha2 contains the API Schema definitions for WSO2 APK.
+//
+// +kubebuilder:object:generate=true
+// +groupName=dp.wso2.com
+package v1alpha2
+```
+
+1. Run the following commands
+```
+cd apk/adapter/internal/operator
+```
+
+```
+make docs
+```
+
+2. This will generate the CRD docs in the apk/adapter/internal/operator/docs folder in the crd.md file.
+3. The sections relevant to the documentation will have to be copy pasted into the docs repository.
+4. To change the target for the autogeneration, go to the gen-docs.sh in the operator folder and change the following section
+```
+gendoc::exec \
+    -api-dir "github.com/wso2/apk/common-go-libs/apis/cp/v1alpha2" \ <----Change this location to the target directory
+    -out-file "${1}" \
+    -v 10
+```

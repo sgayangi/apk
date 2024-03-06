@@ -47,8 +47,8 @@ if [ "$#" != "1" ]; then
     exit 2
 fi
 
-gendoc::build
+# gendoc::build
 gendoc::exec \
-    -api-dir "github.com/wso2/apk/adapter/internal/operator/apis/dp/v1alpha1" \
+    -api-dir "github.com/wso2/apk/common-go-libs/apis/dp/v1alpha2" \
     -out-file "${1}" \
     -v 10
