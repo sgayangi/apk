@@ -273,10 +273,10 @@ public type RetryPolicy record {
 public type APIKeyAuthentication record {|
     *Authentication;
     boolean sendTokenToUpstream = false;
-    string headerName = "apiKey";
-    string queryParamName = "apiKey";
-    boolean headerEnable = true;
-    boolean queryParamEnable = true;
+    string headerName?;
+    string queryParamName?;
+    boolean headerEnable?;
+    boolean queryParamEnable?;
 |};
 
 # Mutual SSL configuration of this API
