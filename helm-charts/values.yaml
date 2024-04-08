@@ -59,6 +59,7 @@ wso2:
       gateway:
         listener:
           hostname: "gw.wso2.com"
+        service: {}
           # secretName: "idp-tls"
       # partitionServer:
       #   enabled: false
@@ -94,6 +95,7 @@ wso2:
           replicas: 1
           imagePullPolicy: Always
           image: wso2/apk-config-deployer-service:1.1.0-rc
+        # debug: true
           # configs:
           #   tls:
           #     secretName: "my-secret"
@@ -344,7 +346,10 @@ gatewaySystem:
   enableClusterRoleCreation: true
   serviceAccountName: gateway-api-admission
   applyGatewayWehbhookJobs: true
-  
+  deployment:
+    image: registry.k8s.io/gateway-api/admission-server:v1.0.0
+    imagePullPolicy: Always
+
 certmanager:
   enabled: true
   enableClusterIssuer: true
