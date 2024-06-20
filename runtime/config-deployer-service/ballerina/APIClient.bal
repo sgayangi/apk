@@ -860,10 +860,7 @@ public class APIClient {
         model:HTTPHeader[] setHeaders = [];
         string[] removeHeaders = [];
         boolean hasRedirectPolicy = false;
-        model:HTTPRouteFilter headerModifierFilter = {'type: "RequestHeaderModifier"};
-        if !isRequest {
-            headerModifierFilter.'type = "ResponseHeaderModifier";
-        }
+
         foreach APKOperationPolicy policy in operationPolicies {
             if policy is HeaderModifierPolicy {
                 HeaderModifierPolicyParameters policyParameters = policy.parameters;
@@ -871,19 +868,19 @@ public class APIClient {
                     AddHeaders => {
                         ModifierHeader[] headers = <ModifierHeader[]>policyParameters.headers;
                         foreach ModifierHeader header in headers {
-                            headers.push(header);
+                            addHeaders.push(header);
                         }
                     }
                     SetHeaders => {
                         ModifierHeader[] headers = <ModifierHeader[]>policyParameters.headers;
                         foreach ModifierHeader header in headers {
-                            headers.push(header);
+                            setHeaders.push(header);
                         }
                     }
                     RemoveHeaders => {
                         string[] headers = <string[]>policyParameters.headers;
                         foreach string header in headers {
-                            headers.push(header);
+                            removeHeaders.push(header);
                         }
                     }
                 }
@@ -956,18 +953,47 @@ public class APIClient {
                 httpRouteFilters.push(redirectFilter);
             }
         }
+        if isRequest {
+            model:HTTPHeaderFilter requestHeaderModifier = {};
+            if addHeaders != [] {
+                requestHeaderModifier.add = addHeaders;
+            }
+            if setHeaders != [] {
+                requestHeaderModifier.set = setHeaders;
+            }
+            if removeHeaders != [] {
+                requestHeaderModifier.remove = removeHeaders;
+            }
+            log:printInfo(addHeaders.length().toString());
+            log:printInfo(setHeaders.length().toString());
+            log:printInfo(removeHeaders.length().toString());
 
-        if addHeaders != [] {
-            headerModifierFilter.requestHeaderModifier.add = addHeaders;
-        }
-        if setHeaders != [] {
-            headerModifierFilter.requestHeaderModifier.set = setHeaders;
-        }
-        if removeHeaders != [] {
-            headerModifierFilter.requestHeaderModifier.remove = removeHeaders;
-        }
-        if addHeaders.length() > 0 || setHeaders.length() > 0 || removeHeaders.length() > 0 {
-            httpRouteFilters.push(headerModifierFilter);
+            if addHeaders.length() > 0 || setHeaders.length() > 0 || removeHeaders.length() > 0 {
+
+                model:HTTPRouteFilter headerModifierFilter = {
+                    'type: "RequestHeaderModifier",
+                    requestHeaderModifier: requestHeaderModifier
+                };
+                httpRouteFilters.push(headerModifierFilter);
+            }
+        } else {
+            model:HTTPHeaderFilter responseHeaderModifier = {};
+            if addHeaders != [] {
+                responseHeaderModifier.add = addHeaders;
+            }
+            if setHeaders != [] {
+                responseHeaderModifier.set = setHeaders;
+            }
+            if removeHeaders != [] {
+                responseHeaderModifier.remove = removeHeaders;
+            }
+            if addHeaders.length() > 0 || setHeaders.length() > 0 || removeHeaders.length() > 0 {
+                model:HTTPRouteFilter headerModifierFilter = {
+                    'type: "ResponseHeaderModifier",
+                    responseHeaderModifier: responseHeaderModifier
+                };
+                httpRouteFilters.push(headerModifierFilter);
+            }
         }
 
         return [httpRouteFilters, hasRedirectPolicy];
